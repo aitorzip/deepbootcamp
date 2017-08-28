@@ -1,0 +1,97 @@
+## Attendee-specific
+
+attendee_id: &attendee_id YOUR_ID_HERE
+ec2_instance_label: *attendee_id
+s3_bucket_root: *attendee_id
+
+aws_access_key: YOUR_ACCESS_KEY_ID_HERE
+aws_access_secret: YOUR_SECRET_ACCESS_KEY_HERE
+
+# TODO run `python scripts/generate_key_pairs.py`, and fill this in!
+
+aws_key_pairs:
+    us-east-1: YOUR_KEY_PAIR_NAME
+
+## Bootcamp-specific
+docker_image: dementrock/deeprlbootcamp
+
+# Since we are using a public docker image, no need to log in
+docker_username: ~
+docker_password: ~
+docker_host: ~
+
+s3_bucket: deeprlbootcamp
+aws_s3_region: us-east-1
+
+# Instance configuration
+aws_instance_type: c4.large
+aws_use_spot_instances: true
+aws_spot_price: 0.1
+
+aws_iam_instance_profile: attendee_instance_profile
+
+aws_image_id:
+    ap-northeast-1: ami-a3c737c5
+    ap-northeast-2: ami-8faa72e1
+    ap-south-1: ami-65094c0a
+    ap-southeast-1: ami-c6bfdba5
+    ap-southeast-2: ami-597b603a
+    ca-central-1: ami-60982604
+    eu-central-1: ami-06933b69
+    eu-west-1: ami-ba08f5c3
+    eu-west-2: ami-13524277
+    sa-east-1: ami-8be293e7
+    us-east-1: ami-b0c2fecb
+    us-east-2: ami-6f43600a
+    us-west-1: ami-1ecce67e
+    us-west-2: ami-999e72e1
+
+aws_regions:
+    - us-east-1
+
+aws_security_groups:
+    us-east-1: sg-55afed24
+
+aws_subnets:
+    us-east-1:
+        us-east-1a: subnet-55155d1d
+        us-east-1b: subnet-5953da03
+        us-east-1c: subnet-82fe18e6
+        us-east-1d: subnet-7db42551
+        us-east-1e: subnet-4b686877
+        us-east-1f: subnet-2076172c
+
+## Other default settings
+
+ec2_project_root: /home/ubuntu/code
+ec2_user: ubuntu
+
+ec2_terminate_machine: true
+
+s3_code_sync_ignores:
+    - data/local
+    - data/s3
+    - build_lab3
+    - build_lab4
+    - build_lab5
+    - bullet3
+    - roboschool
+    - private
+    - pong_warm_start.pkl
+    - dqn/replay_buffer.pkl
+    - dqn/weights.pkl
+    - Lab-Policy-Gradient-Algorithms
+    - Lab-RL-in-the-Cloud
+    - .git
+    - .gitignore
+    - .pods
+    - .DS_Store
+    - .idea
+    - cloudexec.yml
+    - __pycache__
+
+s3_periodic_sync_interval: 15
+
+s3_periodic_sync_include_flags: "--include *progress.json --include *variant.json"
+
+debug: false
