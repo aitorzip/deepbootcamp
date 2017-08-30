@@ -65,10 +65,16 @@ def compute_returns_advantages(rewards, dones, values, next_values, discount):
     :param discount: The discount factor.
     :return: A tuple (returns, advantages), each of which should be a matrix of shape T * N
     """
-    Rs = np.zeros_like(rewards)
-    As = np.zeros_like(rewards)
-    "*** YOUR CODE HERE ***"
+    T, N = rewards.shape
 
+    Rs = np.zeros((T+1,N))
+    As = np.zeros((T,N))
+
+    Rs[T] = next_values
+    for t in range(T-1, -1, -1):
+        Rs[t] = rewards[t] + (1-dones[t])*discount*Rs[t+1]
+        As[t] = Rs[t] - values[t]
+    return Rs[:T], As
 
 def a2c(env, env_maker, policy, vf, joint_model=None, k=20, n_envs=16, discount=0.99,
         optimizer=chainer.optimizers.RMSprop(lr=1e-3), max_grad_norm=1.0, vf_loss_coeff=0.5,
@@ -199,11 +205,10 @@ def a2c(env, env_maker, policy, vf, joint_model=None, k=20, n_envs=16, discount=
                 vf_loss should be the (unweighted) squared loss of value function prediction.
                 total_loss should be the weighted sum of policy_loss and vf_loss
                 """
-                policy_loss = Variable(np.array(0.))
-                vf_loss = Variable(np.array(0.))
-                total_loss = Variable(np.array(0.))
-                "*** YOUR CODE HERE ***"
-                return policy_loss, vf_loss, total_loss
+                policy_loss = -F.mean(logli*all_advs) - F.mean(ent_coeff*ent)
+                vf_loss = F.mean((all_returns - all_values)*(all_returns - all_values))
+
+                return policy_loss, vf_loss, policy_loss + vf_loss_coeff*vf_loss
 
             test_once(compute_total_loss)
 
